@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 
 def carregar_dados():
@@ -36,6 +37,7 @@ def menu():
 
     while True:
 
+
         print("Estacionamento Rotativo")
         print("1. Entrada veículo")
         print("2. Saída veículo")
@@ -50,17 +52,55 @@ def menu():
             return op
             
         print("Opção inválida. Você deve escolher uma opção entre 1 e 6.")
+
+def adicionar_veiculos(dados):
+    placa = input("Digite o código da placa: ")
+    marca = input("Digite a marca do veículo: ")
+    modelo = input("Digite o modelo do veículo: ")
+    horaEntrada = input("Digite a hora de entrada (HH:MM): ")
+
+    if placa == "":
+        print("A placa é obrigatório. Tente novamente.")
+        return
+    
+    if placa in dados:
+        print("Já existe um veículo com essa placa.")
+        return
         
+    dados[placa] = {
+        "marca": marca,
+        "modelo" : modelo,
+        "horaEntrada": horaEntrada
+    }
+    print("Veículo cadastrado com sucesso!")
+
+def listar_veiculos(dados):
+    if len(dados) == 0:
+        print("Nenhum veículo cadastrado.")
+        return
+    
+    for index, placa in enumerate(sorted(dados.keys()),start=1):
+        veiculo = dados[placa]
+        print(
+            f"{index}."
+            f"Placa:{placa}|"
+            f"Marca:{veiculo['marca']}|"
+            f"Entrada:{veiculo['horaEntrada']}"
+        )
+
 dados = carregar_dados()
 
 op = menu()
 
 while op != 6:
-    # falta as funções de Vitoria e Aleckson
+    if op == 1:
+        adicionar_veiculos(dados)
+    
+    if op == 3:
+        listar_veiculos(dados)
 
-
-
-
+    
+    time.sleep(2)
     op = menu()
 
 salvar_dados(dados)
